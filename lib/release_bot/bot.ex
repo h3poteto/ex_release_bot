@@ -8,13 +8,15 @@ defmodule ReleaseBot.Bot do
 
   def handle_connect(slack, state) do
     IO.puts "Connected as #{slack.me.id}"
+    Agent.start_link(fn -> slack.me.id end, name: UserInfo)
     {:ok, state}
   end
 
   def handle_event(message = %{type: "message"}, slack, state) do
+    id = Agent.get(UserInfo, &(&1))
     message.text
     |> String.split(" ")
-    |> ReleaseBot.Handler.handle_message(message.channel, slack, "<@#{slack.me.id}>")
+    |> ReleaseBot.Handler.handle_message(message.channel, slack, "<@#{id}>")
     {:ok, state}
   end
   def handle_event(_, _, state), do: {:ok, state}
