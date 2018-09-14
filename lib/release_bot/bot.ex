@@ -7,12 +7,14 @@ defmodule ReleaseBot.Bot do
   end
 
   def handle_connect(slack, state) do
-    IO.puts "Connected as #{slack.me.name}"
+    IO.puts "Connected as #{slack.me.id}"
     {:ok, state}
   end
 
   def handle_event(message = %{type: "message"}, slack, state) do
-    send_message("I got a message!", message.channel, slack)
+    message.text
+    |> String.split(" ")
+    |> ReleaseBot.Handler.handle_message(message.channel, slack, "<@#{slack.me.id}>")
     {:ok, state}
   end
   def handle_event(_, _, state), do: {:ok, state}
