@@ -1,46 +1,39 @@
 defmodule Github.Branch do
-  use Timex
+  alias Github.Manager
 
-  defp base_branch do
-    System.get_env("BASE_BRANCH")
+  defp new_branch(timestamp) do
+    "#{Manager.release_branch()}-#{timestamp}"
   end
 
-  defp release_branch do
-    System.get_env("RELEASE_BRANCH")
-  end
-
-  defp owner do
-    System.get_env("OWNER")
-  end
-
-  defp repository do
-    System.get_env("REPOSITORY")
-  end
-
-  defp new_branch do
-    now = Timex.now()
-    |> Timex.format!("{YYYY}{0M}{0D}{h24}{0m}{0s}")
-    "#{release_branch()}-#{now}"
-  end
-
-  def create(%Tentacat.Client{auth: _} = client) do
+  def create(%Tentacat.Client{auth: _} = client, timestamp) do
     revision = client
     |> current_revision()
     body = %{
-      "ref" => "refs/heads/#{new_branch()}",
+      "ref" => "refs/heads/#{new_branch(timestamp)}",
       "sha" => revision
     }
     client
-    |> Tentacat.References.create(owner(), repository(), body)
+    |> Tentacat.References.create(Manager.owner(), Manager.repository(), body)
+    |> parse_branch
   end
 
   def current_revision(client) do
     client
-    |> Tentacat.References.find(owner(), repository(), "heads/#{base_branch()}")
+    |> Tentacat.References.find(Manager.owner(), Manager.repository(), "heads/#{Manager.base_branch()}")
     |> parse_revision
   end
 
   defp parse_revision({200, %{"object" => %{"sha" => sha}}, _}) do
     sha
+  end
+
+  defp parse_branch({201, %{"ref" => ref}, _}) do
+    ref
+    |> String.split("/")
+    |> ref_branch
+  end
+
+  defp ref_branch([_, _, branch]) do
+    branch
   end
 end
