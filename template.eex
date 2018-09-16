@@ -1,0 +1,5 @@
+## Releases
+
+<%= for %{"title" => title, "url" => url, "number" => number} <- pulls do %>
+- [#<%= number %>](<%= url %>): <%= title %>
+<% end %>
