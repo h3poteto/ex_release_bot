@@ -12,9 +12,9 @@ defmodule ReleaseBot.Bot do
     {:ok, state}
   end
 
-  def handle_event(message = %{type: "message"}, slack, state) do
+  def handle_event(message = %{type: "message", text: text}, slack, state) do
     id = Agent.get(UserInfo, &(&1))
-    message.text
+    text
     |> String.split(" ")
     |> ReleaseBot.Handler.handle_message(message.channel, slack, "<@#{id}>")
     {:ok, state}

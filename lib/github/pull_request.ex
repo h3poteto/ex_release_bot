@@ -32,7 +32,7 @@ defmodule Github.PullRequest do
     |> parse_url
   end
 
-  defp parse_url({201, %{"url" => url}, _}) do
+  defp parse_url({201, %{"html_url" => url}, _}) do
     url
   end
 
@@ -75,7 +75,7 @@ defmodule Github.PullRequest do
     |> parse_title_and_url
   end
 
-  def parse_title_and_url({200, %{"title" => title, "url" => url, "number" => number}, _}) do
+  def parse_title_and_url({200, %{"title" => title, "html_url" => url, "number" => number}, _}) do
     %{
       "title" => title,
       "url" => url,
