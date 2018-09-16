@@ -9,6 +9,14 @@ defmodule ReleaseBot.Handler do
     send_message(url, channel, slack)
   end
 
+  def handle_message([user_id, "ping"] = _text, channel, slack, user_id) do
+    send_message("pong", channel, slack)
+  end
+
+  def handle_message([user_id, "help"] = _text, channel, slack, user_id) do
+    send_message("*create pull_request* - Create a pull request for release in GitHub.\n*help* - Show this help.", channel, slack)
+  end
+
   def handle_message(_, _, _, _) do
     :ok
   end
