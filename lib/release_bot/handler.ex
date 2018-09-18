@@ -22,7 +22,7 @@ defmodule ReleaseBot.Handler do
   end
 
   def handle_message([user_id, "help"] = _text, channel, slack, user_id) do
-    send_message("*create pull_request* - Create a pull request for release in GitHub.\n*help* - Show this help.", channel, slack)
+    send_message("*create pull_request* - Create a pull request for release in GitHub.\n*release_completed {commit_hash}* - Show pull request body of the release pull rquest.\n*help* - Show this help.", channel, slack)
   end
 
   def handle_message(_, _, _, _) do
