@@ -3,7 +3,7 @@ defmodule ReleaseBot.Bot do
   use Slack
 
   def start_link(initial_state) do
-    Slack.Bot.start_link(__MODULE__, initial_state, System.get_env("SLACK_API_TOKEN"))
+    Slack.Bot.start_link(__MODULE__, initial_state, Application.get_env(:release_bot, :slack_token))
   end
 
   def handle_connect(slack, state) do

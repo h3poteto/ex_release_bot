@@ -8,23 +8,23 @@ defmodule Github.Manager do
   end
 
   defp access_token do
-    System.get_env("GITHUB_TOKEN")
+    Application.get_env(:release_bot, :github_token)
   end
 
   def base_branch do
-    System.get_env("BASE_BRANCH")
+    Application.get_env(:release_bot, :base_branch)
   end
 
   def release_branch do
-    System.get_env("RELEASE_BRANCH")
+    Application.get_env(:release_bot, :release_branch)
   end
 
   def owner do
-    System.get_env("OWNER")
+    Application.get_env(:release_bot, :owner)
   end
 
   def repository do
-    System.get_env("REPOSITORY")
+    Application.get_env(:release_bot, :repository)
   end
 
   def create_release_pull_request() do

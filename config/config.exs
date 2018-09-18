@@ -28,3 +28,10 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env()}.exs"
+config :release_bot,
+  slack_token: System.get_env("SLACK_API_TOKEN") || "${SLACK_API_TOKEN}",
+  github_token: System.get_env("GITHUB_TOKEN") || "${GITHUB_TOKEN}",
+  base_branch: System.get_env("BASE_BRANCH") || "${BASE_BRANCH}",
+  release_branch: System.get_env("RELEASE_BRANCH") || "${RELEASE_BRANCH}",
+  owner: System.get_env("OWNER") || "${OWNER}",
+  repository: System.get_env("REPOSITORY") ||"${REPOSITORY}"
