@@ -1,0 +1,16 @@
+version: '3.0'
+services:
+  elixir:
+    image: elixir:1.7.3-alpine
+    working_dir: /var/opt/app
+    volumes:
+      - .:/var/opt/app
+    environment:
+      - RELX_REPLACE_OS_VARS=true
+      - SLACK_API_TOKEN=$SLACK_API_TOKEN
+      - BASE_BRANCH=$BASE_BRANCH
+      - RELEASE_BRANCH=$RELEASE_BRANCH
+      - OWNER=$OWNER
+      - REPOSITORY=$REPOSITORY
+      - GITHUB_TOKEN=$GITHUB_TOKEN
+    command: /bin/sh

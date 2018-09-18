@@ -75,11 +75,24 @@ defmodule Github.PullRequest do
     |> parse_title_and_url
   end
 
-  def parse_title_and_url({200, %{"title" => title, "html_url" => url, "number" => number}, _}) do
+  defp parse_title_and_url({200, %{"title" => title, "html_url" => url, "number" => number}, _}) do
     %{
       "title" => title,
       "url" => url,
       "number" => number
+    }
+  end
+
+  def get_body(%Tentacat.Client{auth: _} = client, number) do
+    client
+    |> Tentacat.Pulls.find(Manager.owner(), Manager.repository(), number)
+    |> parse_body_and_url
+  end
+
+  defp parse_body_and_url({200, %{"html_url" => url, "body" => body}, _}) do
+    %{
+      "body" => body,
+      "url" => url
     }
   end
 end

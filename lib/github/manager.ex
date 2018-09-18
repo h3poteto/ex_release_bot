@@ -2,6 +2,7 @@ defmodule Github.Manager do
   use Timex
   alias Github.Branch
   alias Github.PullRequest
+  alias Github.Commit
 
   def client do
     Tentacat.Client.new(%{access_token: access_token()})
@@ -36,5 +37,12 @@ defmodule Github.Manager do
 
     client()
     |> PullRequest.create(timestamp, branch)
+  end
+
+  def get_release_body(sha) do
+    number = client()
+    |> Commit.find_pull_request(sha)
+    client()
+    |> PullRequest.get_body(number)
   end
 end
